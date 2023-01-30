@@ -1,0 +1,19 @@
+.Menu {
+    margin-top: 50px;
+
+}
+
+.Search {
+    margin-left: 280px;
+    max-width: 1000px;
+}
+
+.Card {
+    margin-top: 30px;
+    margin-left: 30px;
+    width: 400px;
+}
+
+.Hide {
+    margin-left: 30px;
+}
