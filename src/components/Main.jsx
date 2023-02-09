@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -10,7 +11,7 @@ import styles from './Main.module.css'
 import Check from '@mui/icons-material/Check';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import {products,basketProd} from "../data/products";
+import {basketProd, products} from "../data/products";
 import Snackbar from "@mui/material/Snackbar";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -31,12 +32,14 @@ export function FullWidthTextField() {
   );
 }
 
-export function Hide() {
+export function Hide(props) {
+
+  const handleChange = (e) => {
+    props.setCount(e.target.value)
+  }
   return (
-    <Box
-      sx={{minWidth: 50, maxWidth: 100}}
-    >
-      <TextField fullWidth label="Число" id="Hide" />
+    <Box sx={{minWidth: 50, maxWidth: 100}}>
+      <TextField fullWidth label="Число" value={props.count} onChange={handleChange} />
     </Box>
   );
 }
@@ -48,31 +51,24 @@ export function Menu() {
       className={styles.Menu}
       sx={{ width: 250 }}>
       <MenuList dense >
-        <MenuItem>
-          <ListItemText inset>Menu Item 1</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemText inset>Menu Item 2</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-          <Check />
-        </ListItemIcon>
-          <ListItemText inset>Menu Item 3</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemText inset>Menu Item 4</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemText inset>Menu Item 5</ListItemText>
-        </MenuItem>
+        <Link to={'/'}>
+          <MenuItem>
+            <ListItemText inset>Menu Item 1</ListItemText>
+          </MenuItem>
+        </Link>
+        <Link to={'/basket'}>
+          <MenuItem>
+            <ListItemText inset>Menu Item 2</ListItemText>
+          </MenuItem>
+        </Link>
       </MenuList>
     </Paper>
   );
 }
 
 
-export function Main() {
+export function Main(props) {
+
   const [open, setOpen] = React.useState(false);
   const action = (
     <React.Fragment>
@@ -80,10 +76,7 @@ export function Main() {
         size="small"
         aria-label="close"
         color="inherit"
-        onClick={() => {
-          setOpen(false)
-        }}
-      >
+        onClick={() => {setOpen(false)}}>
         <CloseIcon fontSize="small"/>
       </IconButton>
     </React.Fragment>
@@ -92,18 +85,19 @@ export function Main() {
     <Box>
       <Box style={{display: 'flex'}}>
         <Box>
-          <FullWidthTextField/>
+          <FullWidthTextField />
         </Box>
         <Box className={styles.Hide}>
-          <Hide/>
+          <Hide count={props.count} setCount={props.setCount}/>
         </Box>
       </Box>
       <Box style={{display: 'flex'}}>
         <Box style={{width: '250px'}}>
           <Menu/>
+          <getAllProducts/>
         </Box>
         <Box>
-          <Products products={products} setOpen={setOpen} />
+          <Products products={props.products} addToBasket={props.addToBasket} setOpen={setOpen} />
         </Box>
       </Box>
       <Snackbar
@@ -120,6 +114,7 @@ export function Main() {
 }
 
 export function Products(props) {
+
   return(
     <Box style={{display:'inline-flex', flexWrap:'wrap'}}>
       {props.products.map(el => (
@@ -133,7 +128,10 @@ export function Products(props) {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small" onClick={()=>{props.setOpen(true)}}>Добавить в корзину</Button>
+            <Button size="small" onClick={()=>{
+              props.setOpen(true);
+              props.addToBasket(el)
+            }}>Добавить в корзину</Button>
             <Button size="small">Редактировать</Button>
             <Button size="tiny">Скрыть</Button>
           </CardActions>
@@ -142,4 +140,5 @@ export function Products(props) {
     </Box>
   )
 }
+
 

@@ -1,0 +1,7 @@
+https://fakestoreapi.com/docs - АПИ запросов.
+
+1. Получить все товары при открытии страницы с помощью "Get all products";
+2. Задать ограничение "Limit results";
+3. Добавить товар "Add new product";
+4. Редактиваровать товар одним из "Update a product";
+5. Удалить товар "Delete a product"

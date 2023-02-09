@@ -17,3 +17,10 @@
 .Hide {
     margin-left: 30px;
 }
+
+.Sale {
+    border: salmon;
+    text-align: right;
+    position: absolute;
+    margin-top: 50px;
+}
