@@ -2,11 +2,14 @@ import React,{useEffect} from "react";
 import {Route, Routes, BrowserRouter} from 'react-router-dom'
 import {Main} from "./components/Main";
 import {Basket} from "./components/Basket";
-import {getAllProducts, limitProduct} from "./Services/services";
+import {addNewProduct, getAllProducts, } from "./Services/services";
+
+
 
 
 export function App() {
   const [count, setCount] = React.useState('');
+  const [booleanState, setBooleanState] = React.useState('false')
   const [basketState, setBasketState] = React.useState([]);
   const [products, setProducts] = React.useState([]);
   const addToBasket = (el)=>{
@@ -15,21 +18,38 @@ export function App() {
   const delBasket = () =>{
     setBasketState([])
   }
-  useEffect(()=> {
 
+
+  useEffect(()=> {
     getAllProducts(setProducts,count)
-  },[count])
+  },[count,booleanState])
+
+  const delCard = () =>{
+    setBasketState([])
+  }
+
+  const [product, setProduct] = React.useState({title:'', price:'', id: Date.now()})
+  const addProduct = () => {
+    addNewProduct(product,setBooleanState)
+    setProduct({title:'', price:'', id: Date.now()})
+
+  }
+
 
 
   return (
    <BrowserRouter>
      <Routes>
       <Route path="/" element={<Main
+        addProduct={addProduct}
+        product={product}
+        setProduct={setProduct}
         addToBasket={addToBasket}
         products={products}
         setProducts={setProducts}
         setCount={setCount}
         count={count}
+        delCard={delCard}
       />}></Route>
       <Route path="/basket" element={<Basket
         basketState={basketState}

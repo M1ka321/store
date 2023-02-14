@@ -18,6 +18,11 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import Dialog from "@mui/material/Dialog";
+import {useState} from "react";
+
 
 
 
@@ -44,7 +49,8 @@ export function Hide(props) {
   );
 }
 
-export function Menu() {
+export function Menu(props) {
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Paper
@@ -61,10 +67,45 @@ export function Menu() {
             <ListItemText inset>Menu Item 2</ListItemText>
           </MenuItem>
         </Link>
+          <MenuItem>
+            <ListItemText onClick={()=>{setOpen(true)}}>Добавить товар</ListItemText>
+            <Dialog
+              style={{textAlign: "center"}}
+              open={open}
+              onClose={() => {setOpen(false)}}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Добавление товара"}
+              </DialogTitle>
+              <DialogContent style={{display:'flex', flexDirection: 'column', minWidth: '500px'}}>
+                <TextField
+                  value={props.product.title}
+                  onChange={e => props.setProduct({...props.product, title: e.target.value})}
+                  style={{margin:'15px'}}
+                  id="outlined-basic"
+                  label="Описание"
+                  variant="outlined"
+                />
+                <TextField
+                  value={props.product.price}
+                  onChange={e => props.setProduct({...props.product, price: e.target.value})}
+                  style={{margin:'15px'}}
+                  id="outlined-basic"
+                  label="Цена"
+                  variant="outlined"
+                />
+                <Button onClick={props.addProduct }>Сохранить </Button>
+                <Button onClick={()=>{setOpen(false)}}> Отминет </Button>
+              </DialogContent>
+            </Dialog>
+          </MenuItem>
       </MenuList>
     </Paper>
   );
 }
+
 
 
 export function Main(props) {
@@ -93,11 +134,21 @@ export function Main(props) {
       </Box>
       <Box style={{display: 'flex'}}>
         <Box style={{width: '250px'}}>
-          <Menu/>
+          <Menu
+            addProduct={props.addProduct}
+            product={props.product}
+            setProduct={props.setProduct}
+          />
           <getAllProducts/>
         </Box>
         <Box>
-          <Products products={props.products} addToBasket={props.addToBasket} setOpen={setOpen} />
+          <Products
+            products={props.products}
+            addToBasket={props.addToBasket}
+            setOpen={setOpen}
+            setProducts={props.setProducts}
+            delCard={props.delCard}
+          />
         </Box>
       </Box>
       <Snackbar
@@ -118,7 +169,8 @@ export function Products(props) {
   return(
     <Box style={{display:'inline-flex', flexWrap:'wrap'}}>
       {props.products.map(el => (
-        <Card className={styles.Card}>
+        <Card className={styles.Card}
+        >
           <CardContent>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
               {el.title}
@@ -133,7 +185,9 @@ export function Products(props) {
               props.addToBasket(el)
             }}>Добавить в корзину</Button>
             <Button size="small">Редактировать</Button>
-            <Button size="tiny">Скрыть</Button>
+            <Button size="tiny" onClick={()=>{
+              props.setProducts(props.products.filter(item=> el.id !== item.id))
+            }}>Скрыть</Button>
           </CardActions>
         </Card>
       ))}
