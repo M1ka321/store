@@ -38,19 +38,53 @@ export function FullWidthTextField() {
 }
 
 export function Hide(props) {
-
+  const [open, setOpen] = React.useState(false);
   const handleChange = (e) => {
     props.setCount(e.target.value)
   }
   return (
-    <Box sx={{minWidth: 50, maxWidth: 100}}>
-      <TextField fullWidth label="Число" value={props.count} onChange={handleChange} />
+    <Box >
+      <TextField sx={{minWidth: 50, maxWidth: 100}} fullWidth label="Число" value={props.count} onChange={handleChange} />
+      <Button sx={{marginLeft: '15 px'}}>
+        <ListItemText onClick={()=>{setOpen(true)}}>Добавить товар</ListItemText>
+        <Dialog
+          style={{textAlign: "center"}}
+          open={open}
+          onClose={() => {setOpen(false)}}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Добавление товара"}
+          </DialogTitle>
+          <DialogContent style={{display:'flex', flexDirection: 'column', minWidth: '500px'}}>
+            <TextField
+              value={props.product.title}
+              onChange={e => props.setProduct({...props.product, title: e.target.value})}
+              style={{margin:'15px'}}
+              id="outlined-basic"
+              label="Описание"
+              variant="outlined"
+            />
+            <TextField
+              value={props.product.price}
+              onChange={e => props.setProduct({...props.product, price: e.target.value})}
+              style={{margin:'15px'}}
+              id="outlined-basic"
+              label="Цена"
+              variant="outlined"
+            />
+            <Button onClick={props.addProduct }>Сохранить </Button>
+            <Button onClick={()=>{setOpen(false)}}> Отминет </Button>
+          </DialogContent>
+        </Dialog>
+      </Button>
     </Box>
   );
 }
 
 export function Menu(props) {
-  const [open, setOpen] = React.useState(false);
+
 
   return (
     <Paper
@@ -67,40 +101,7 @@ export function Menu(props) {
             <ListItemText inset>Menu Item 2</ListItemText>
           </MenuItem>
         </Link>
-          <MenuItem>
-            <ListItemText onClick={()=>{setOpen(true)}}>Добавить товар</ListItemText>
-            <Dialog
-              style={{textAlign: "center"}}
-              open={open}
-              onClose={() => {setOpen(false)}}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Добавление товара"}
-              </DialogTitle>
-              <DialogContent style={{display:'flex', flexDirection: 'column', minWidth: '500px'}}>
-                <TextField
-                  value={props.product.title}
-                  onChange={e => props.setProduct({...props.product, title: e.target.value})}
-                  style={{margin:'15px'}}
-                  id="outlined-basic"
-                  label="Описание"
-                  variant="outlined"
-                />
-                <TextField
-                  value={props.product.price}
-                  onChange={e => props.setProduct({...props.product, price: e.target.value})}
-                  style={{margin:'15px'}}
-                  id="outlined-basic"
-                  label="Цена"
-                  variant="outlined"
-                />
-                <Button onClick={props.addProduct }>Сохранить </Button>
-                <Button onClick={()=>{setOpen(false)}}> Отминет </Button>
-              </DialogContent>
-            </Dialog>
-          </MenuItem>
+
       </MenuList>
     </Paper>
   );
@@ -129,15 +130,18 @@ export function Main(props) {
           <FullWidthTextField />
         </Box>
         <Box className={styles.Hide}>
-          <Hide count={props.count} setCount={props.setCount}/>
+          <Hide count={props.count}
+            setCount={props.setCount}
+            addProduct={props.addProduct}
+            product={props.product}
+            setProduct={props.setProduct}
+          />
         </Box>
       </Box>
       <Box style={{display: 'flex'}}>
         <Box style={{width: '250px'}}>
           <Menu
-            addProduct={props.addProduct}
-            product={props.product}
-            setProduct={props.setProduct}
+
           />
           <getAllProducts/>
         </Box>

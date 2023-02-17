@@ -32,6 +32,7 @@ export function App() {
   const addProduct = () => {
     addNewProduct(product,setBooleanState)
     setProduct({title:'', price:'', id: Date.now()})
+    console.log(product)
 
   }
 

@@ -68,15 +68,18 @@ export function Basket(props) {
         <DialogTitle id="alert-dialog-title">
           {"Удалить товар из корзины?"}
         </DialogTitle>
+        {props.basketState.map(el => (
         <DialogActions>
           <Button
            onClick={()=>{ setOpen(false);
             props.setBasketState(props.basketState.filter(item=> el.id !== item.id))
           }}>Да</Button>
+
           <Button onClick={()=>{ setOpen(false)}} autoFocus>
             Нет
           </Button>
         </DialogActions>
+            ))}
       </Dialog>
         ))}
     </Box>
