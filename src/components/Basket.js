@@ -35,7 +35,8 @@ import Select from '@mui/material/Select';
 
 
 export function Basket(props) {
-  const [open, setOpen] = React.useState(false);;
+  const [open, setOpen] = React.useState(false);
+  const [id, setId] = React.useState();
   console.log(props.basketState)
 
 
@@ -54,34 +55,33 @@ export function Basket(props) {
           basketState={props.basketState}
           setBasketState = {props.setBasketState}
           setOpen={setOpen}
+          delBasketCard={props.delBasketCard}
         />
       </Box>
-      {props.basketState.map(el => (
+
       <Dialog
         open={open}
         onClose={() => {
           setOpen(false)
         }}
+        delBasketCard={props.delBasketCard}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
           {"Удалить товар из корзины?"}
         </DialogTitle>
-        {props.basketState.map(el => (
         <DialogActions>
           <Button
            onClick={()=>{ setOpen(false);
-            props.setBasketState(props.basketState.filter(item=> el.id !== item.id))
+            props.delBasketCard(props.basketState)
           }}>Да</Button>
-
           <Button onClick={()=>{ setOpen(false)}} autoFocus>
             Нет
           </Button>
         </DialogActions>
-            ))}
       </Dialog>
-        ))}
+
     </Box>
 
   )
@@ -181,6 +181,7 @@ export function Sale (props) {
           </DialogTitle>
           <DialogContent>
               Способ оплаты: {choice1}
+
               Способ доставки: {choice2}
           </DialogContent>
         </Dialog>

@@ -19,6 +19,10 @@ export function App() {
     setBasketState([])
   }
 
+  const delBasketCard = (basketState) => {
+    basketState.map(el => (setBasketState(basketState.filter(item=> el.id !== item.id))))
+  }
+
 
   useEffect(()=> {
     getAllProducts(setProducts,count)
@@ -56,6 +60,7 @@ export function App() {
         basketState={basketState}
         setBasketState = {setBasketState}
         delBasket={delBasket}
+        delBasketCard={delBasketCard}
       />}></Route>
      </Routes>
    </BrowserRouter>
